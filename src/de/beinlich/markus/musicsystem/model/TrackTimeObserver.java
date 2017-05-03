@@ -5,16 +5,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.beinlich.markus.musicsystem.lib;
+package de.beinlich.markus.musicsystem.model;
 
 /**
  *
  * @author Markus Beinlich
  */
-public interface MusicCollectionObserver {
+public interface TrackTimeObserver {
 
     /**
      *
      */
-    void updateMusicCollection();
+    void updateTrackTime();
 }

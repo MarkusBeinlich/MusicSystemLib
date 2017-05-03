@@ -1,6 +1,6 @@
-package de.beinlich.markus.musicsystem.lib;
+package de.beinlich.markus.musicsystem.model.net;
 
-import de.beinlich.markus.musicsystem.lib.ServerAddr;
+import de.beinlich.markus.musicsystem.model.net.ServerAddr;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;

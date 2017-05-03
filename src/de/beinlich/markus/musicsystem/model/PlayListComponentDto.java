@@ -1,4 +1,4 @@
-package de.beinlich.markus.musicsystem.lib;
+package de.beinlich.markus.musicsystem.model;
 
 import java.io.*;
 import java.util.*;

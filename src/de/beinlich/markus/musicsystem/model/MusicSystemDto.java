@@ -1,5 +1,10 @@
-package de.beinlich.markus.musicsystem.lib;
+package de.beinlich.markus.musicsystem.model;
 
+import de.beinlich.markus.musicsystem.model.TrackObserver;
+import de.beinlich.markus.musicsystem.model.TrackTimeObserver;
+import de.beinlich.markus.musicsystem.model.VolumeObserver;
+import de.beinlich.markus.musicsystem.model.net.ServerPoolObserver;
+import de.beinlich.markus.musicsystem.model.net.ServerAddr;
 import java.io.*;
 import java.util.*;
 

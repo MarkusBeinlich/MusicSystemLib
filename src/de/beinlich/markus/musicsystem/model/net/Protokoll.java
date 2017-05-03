@@ -1,6 +1,6 @@
-package de.beinlich.markus.musicsystem.lib;
+package de.beinlich.markus.musicsystem.model.net;
 
-import de.beinlich.markus.musicsystem.lib.*;
+import de.beinlich.markus.musicsystem.model.net.ProtokollType;
 import java.io.*;
 
 /**

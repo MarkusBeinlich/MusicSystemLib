@@ -1,7 +1,7 @@
 
-package de.beinlich.markus.musicsystem.lib;
+package de.beinlich.markus.musicsystem.model;
 
-import de.beinlich.markus.musicsystem.lib.PlayListComponentDto;
+import de.beinlich.markus.musicsystem.model.PlayListComponentDto;
 import java.io.*;
 
 

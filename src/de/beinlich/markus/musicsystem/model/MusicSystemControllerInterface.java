@@ -1,4 +1,6 @@
-package de.beinlich.markus.musicsystem.lib;
+package de.beinlich.markus.musicsystem.model;
+
+import de.beinlich.markus.musicsystem.model.RecordInterface;
 
 
 /**

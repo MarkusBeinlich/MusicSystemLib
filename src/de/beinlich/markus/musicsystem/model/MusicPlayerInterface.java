@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.beinlich.markus.musicsystem.lib;
+package de.beinlich.markus.musicsystem.model;
 
-import de.beinlich.markus.musicsystem.lib.MusicPlayerDto;
-import java.io.*;
 
 /**
  *

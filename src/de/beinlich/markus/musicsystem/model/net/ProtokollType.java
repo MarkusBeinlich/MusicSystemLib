@@ -1,6 +1,13 @@
 
-package de.beinlich.markus.musicsystem.lib;
+package de.beinlich.markus.musicsystem.model.net;
 
+import de.beinlich.markus.musicsystem.model.ClientInit;
+import de.beinlich.markus.musicsystem.model.MusicCollectionDto;
+import de.beinlich.markus.musicsystem.model.MusicPlayerDto;
+import de.beinlich.markus.musicsystem.model.MusicSystemDto;
+import de.beinlich.markus.musicsystem.model.MusicSystemState;
+import de.beinlich.markus.musicsystem.model.PlayListComponentDto;
+import de.beinlich.markus.musicsystem.model.RecordDto;
 import java.io.*;
 
 /**
