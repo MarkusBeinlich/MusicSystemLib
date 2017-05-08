@@ -153,6 +153,7 @@ public class ServerPool extends Observable implements Serializable {
 
         @Override
         public void run() {
+            System.out.println("isReachable: " + address.toString());
             try {
                 if (address.isReachable(20)) {
                     System.out.println(address.toString().substring(1) + " is on the network");
@@ -162,7 +163,8 @@ public class ServerPool extends Observable implements Serializable {
                 Logger.getLogger(MusicServerFinder.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-                private void tryAllPorts(String hostAddress) {
+
+        private void tryAllPorts(String hostAddress) {
             for (int j = 1; j <= 3; j++) {
                 tryToConnectServer(hostAddress, 50000 + j);
             }
@@ -170,11 +172,29 @@ public class ServerPool extends Observable implements Serializable {
 
         private void tryToConnectServer(String hostAddress, int port) {
             Socket socket;
+            ObjectInputStream ois;
+            ObjectOutputStream oos;
+            Protokoll nachricht;
+            System.out.println("tryToConnetServer " + hostAddress + " " + port);
             try {
                 socket = new Socket(hostAddress, port);
-                System.out.println(System.currentTimeMillis() + "socket.connect");
-                String name = hostAddress.concat(String.valueOf(port));
-                uniqueInstance.addServer(name, new ServerAddr(port, hostAddress, name, true));
+                // Erzeugung der Kommunikations-Objekte
+                ois = new ObjectInputStream(socket.getInputStream());
+                System.out.println(System.currentTimeMillis() + "socket.connect 2");
+                oos = new ObjectOutputStream(socket.getOutputStream());
+                // Als erstes write die eigene ServerAddresse übergeben!
+                oos.writeObject(new Protokoll(ProtokollType.SERVER_ADDR_REQUEST, true));
+                oos.flush();
+                try {
+                    nachricht = (Protokoll) ois.readObject(); // blockiert!
+                    ServerAddr serverAddr = (ServerAddr) nachricht.getValue();
+                    uniqueInstance.addServer(serverAddr.getName(), serverAddr);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ServerPool.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                oos.writeObject(new Protokoll(ProtokollType.CLIENT_DISCONNECT, true));
+                oos.flush();
+                socket.close();
 //                new Thread(new ClientHandler(socket, MusicServer.this, true)).start();
             } catch (ConnectException e) {
                 System.out.println(System.currentTimeMillis() + "Error while connecting. " + e.getMessage());
