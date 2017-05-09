@@ -15,49 +15,52 @@ public class ServerPool extends Observable implements Serializable {
     private static final long serialVersionUID = 5923335649688352457L;
 
     protected static ServerPool uniqueInstance;
-    private Map<String, ServerAddr> servers;
-    private String fileNameServerPool;
+    private final Map<String, ServerAddr> servers;
+    transient private ServerAddr myServerAddr;
 
-    private ServerPool(String clientName) {
-        fileNameServerPool = clientName + ".ServerPool";
-        File serverFile = new File(fileNameServerPool);
-        if (!serverFile.exists()) {
-            servers = new TreeMap<>();
-            try {
-                //Der Standard-Server muss immer eingetragen sein, damit sich die Server
-                //gegenseitig finden können
-                addServer("HiFi-Anlage", new ServerAddr(50001, InetAddress.getLocalHost().getHostAddress(), "HiFi-Anlage", true));
-//            addServer(musicNetComponent.getMusicSystem().getName(), musicNetComponent.getMusicSystem().getServerAddr());
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(ServerPool.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            try {
-                FileInputStream fis = new FileInputStream(serverFile);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                servers = (Map) ois.readObject();
-                ois.close();
-                // aktuellen Server aktiv setzen - wenn er nicht existiert wird er hinzugefügt
-                // Das geht zumindest Client-seitig nicht, da das MusicSystem ja noch nicht existiert, wenn der Serverpool erzeugt wird
-//                if (servers.containsKey(musicNetComponent.getMusicSystem().getName())) {
-//                    servers.get(musicNetComponent.getMusicSystem().getName()).setActiv(true);
-//                } else {
-//                    addServer(musicNetComponent.getMusicSystem().getName(), musicNetComponent.getMusicSystem().getServerAddr());
-//                }
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(ServerPool.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(ServerPool.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ServerPool.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
+    private ServerPool(ServerAddr myServerAddr) {
+        this.myServerAddr = myServerAddr;
+        servers = new TreeMap<>();
+        findServers();
+//        fileNameServerPool = clientName + ".ServerPool";
+//        File serverFile = new File(fileNameServerPool);
+//        if (!serverFile.exists()) {
+//            servers = new TreeMap<>();
+//            try {
+//                //Der Standard-Server muss immer eingetragen sein, damit sich die Server
+//                //gegenseitig finden können
+//                addServer("HiFi-Anlage", new ServerAddr(50001, InetAddress.getLocalHost().getHostAddress(), "HiFi-Anlage", true));
+////            addServer(musicNetComponent.getMusicSystem().getName(), musicNetComponent.getMusicSystem().getServerAddr());
+//            } catch (UnknownHostException ex) {
+//                Logger.getLogger(ServerPool.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        } else {
+//            try {
+//                FileInputStream fis = new FileInputStream(serverFile);
+//                ObjectInputStream ois = new ObjectInputStream(fis);
+//                servers = (Map) ois.readObject();
+//                ois.close();
+//                // aktuellen Server aktiv setzen - wenn er nicht existiert wird er hinzugefügt
+//                // Das geht zumindest Client-seitig nicht, da das MusicSystem ja noch nicht existiert, wenn der Serverpool erzeugt wird
+////                if (servers.containsKey(musicNetComponent.getMusicSystem().getName())) {
+////                    servers.get(musicNetComponent.getMusicSystem().getName()).setActiv(true);
+////                } else {
+////                    addServer(musicNetComponent.getMusicSystem().getName(), musicNetComponent.getMusicSystem().getServerAddr());
+////                }
+//            } catch (FileNotFoundException ex) {
+//                Logger.getLogger(ServerPool.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (IOException ex) {
+//                Logger.getLogger(ServerPool.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (ClassNotFoundException ex) {
+//                Logger.getLogger(ServerPool.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//        }
     }
 
-    public static synchronized ServerPool getInstance(String clientName) {
+    public static synchronized ServerPool getInstance(ServerAddr myServerAddr) {
         if (uniqueInstance == null) {
-            uniqueInstance = new ServerPool(clientName);
+            uniqueInstance = new ServerPool(myServerAddr);
         }
         return uniqueInstance;
     }
@@ -66,7 +69,7 @@ public class ServerPool extends Observable implements Serializable {
         //nicht in sich selbst einfügen
         if (this != serverPool) {
             servers.putAll(serverPool.getServers());
-            saveServerPool();
+//            saveServerPool();
         }
         return this;
     }
@@ -77,33 +80,20 @@ public class ServerPool extends Observable implements Serializable {
 
     public void addServer(String name, ServerAddr serverAddr) {
         servers.put(name, serverAddr);
-        saveServerPool();
+//        saveServerPool();
         hasChanged();
         notifyObservers(serverAddr);
     }
 
-    private void saveServerPool() {
-        try {
-            FileOutputStream fos = new FileOutputStream(fileNameServerPool);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(getServers());
-            System.out.println(System.currentTimeMillis() + "saveServerPool:" + getServers());
-            oos.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ServerPool.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ServerPool.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     public List<String> getActiveServers() {
-        List<String> activeServers = new ArrayList<>();
-        servers.forEach((key, value) -> {
-            if (value.isActiv()) {
-                activeServers.add(key);
-            }
-        });
-        return activeServers;
+//        List<String> activeServers = new ArrayList<>();
+//        servers.forEach((key, value) -> {
+//            if (value.isActiv()) {
+//                activeServers.add(key);
+//            }
+//        });
+//        return activeServers;
+        return new ArrayList<>(servers.keySet());
     }
 
     /**
@@ -133,6 +123,7 @@ public class ServerPool extends Observable implements Serializable {
             try {
                 ip[3] = (byte) i;
                 InetAddress address = InetAddress.getByAddress(ip);
+                System.out.println("Search for: " + address);
                 Thread musicServerFinderThread = new Thread(new MusicServerFinder(address));
                 musicServerFinderThread.setDaemon(true);
                 musicServerFinderThread.start();
@@ -143,9 +134,9 @@ public class ServerPool extends Observable implements Serializable {
         }
     }
 
-    public class MusicServerFinder implements Runnable {
+    private class MusicServerFinder implements Runnable {
 
-        private InetAddress address;
+        private final InetAddress address;
 
         public MusicServerFinder(InetAddress address) {
             this.address = address;
@@ -183,7 +174,7 @@ public class ServerPool extends Observable implements Serializable {
                 System.out.println(System.currentTimeMillis() + "socket.connect 2");
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 // Als erstes write die eigene ServerAddresse übergeben!
-                oos.writeObject(new Protokoll(ProtokollType.SERVER_ADDR_REQUEST, true));
+                oos.writeObject(new Protokoll(ProtokollType.SERVER_ADDR_REQUEST, myServerAddr));
                 oos.flush();
                 try {
                     nachricht = (Protokoll) ois.readObject(); // blockiert!
@@ -209,7 +200,7 @@ public class ServerPool extends Observable implements Serializable {
 
     @Override
     public String toString() {
-        return this.fileNameServerPool + " Servers: " + servers.toString();
+        return this.myServerAddr + " Servers: " + servers.toString();
     }
 
 }

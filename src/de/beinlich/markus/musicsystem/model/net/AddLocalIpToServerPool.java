@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class AddLocalIpToServerPool {
     public static void main(String[] args) {
-        ServerPool serverPool = ServerPool.getInstance("Client");
+        ServerPool serverPool = ServerPool.getInstance(null);
         try {
             serverPool.addServer("Local", new ServerAddr(50001, InetAddress.getLocalHost().getHostAddress(), "Local", true));
         } catch (UnknownHostException ex) {

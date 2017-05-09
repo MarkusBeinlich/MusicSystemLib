@@ -34,7 +34,7 @@ public enum ProtokollType implements Serializable{
     CLIENT_INIT(ClientInit.class),
     SERVER_POOL(ServerPool.class),
     SERVER_ADDR(ServerAddr.class),
-    SERVER_ADDR_REQUEST(Boolean.class),
+    SERVER_ADDR_REQUEST(ServerAddr.class),
     CLIENT_DISCONNECT(Boolean.class),
     SERVER_DISCONNECT(Boolean.class),
 //    HAS_CURRENT_TIME(Boolean.class),
