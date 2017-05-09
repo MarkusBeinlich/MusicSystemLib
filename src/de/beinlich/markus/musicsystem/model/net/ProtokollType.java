@@ -9,6 +9,7 @@ import de.beinlich.markus.musicsystem.model.MusicSystemState;
 import de.beinlich.markus.musicsystem.model.PlayListComponentDto;
 import de.beinlich.markus.musicsystem.model.RecordDto;
 import java.io.*;
+import java.util.TreeMap;
 
 /**
  *
@@ -32,9 +33,9 @@ public enum ProtokollType implements Serializable{
     CLIENT_COMMAND_PAUSE(MusicSystemState.class),
     CLIENT_COMMAND_STOP(MusicSystemState.class),
     CLIENT_INIT(ClientInit.class),
-    SERVER_POOL(ServerPool.class),
+    SERVER_POOL(TreeMap.class),
     SERVER_ADDR(ServerAddr.class),
-    SERVER_ADDR_REQUEST(ServerAddr.class),
+    SERVER_ADDR_REQUEST(Boolean.class),
     CLIENT_DISCONNECT(Boolean.class),
     SERVER_DISCONNECT(Boolean.class),
 //    HAS_CURRENT_TIME(Boolean.class),

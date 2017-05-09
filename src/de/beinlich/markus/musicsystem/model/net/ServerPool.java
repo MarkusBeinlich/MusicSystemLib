@@ -65,12 +65,8 @@ public class ServerPool extends Observable implements Serializable {
         return uniqueInstance;
     }
 
-    public ServerPool addServers(ServerPool serverPool) {
-        //nicht in sich selbst einfügen
-        if (this != serverPool) {
-            servers.putAll(serverPool.getServers());
-//            saveServerPool();
-        }
+    public ServerPool addServers(Map<String, ServerAddr> servers) {
+        this.servers.putAll(servers);
         return this;
     }
 
@@ -174,7 +170,11 @@ public class ServerPool extends Observable implements Serializable {
                 System.out.println(System.currentTimeMillis() + "socket.connect 2");
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 // Als erstes write die eigene ServerAddresse übergeben!
-                oos.writeObject(new Protokoll(ProtokollType.SERVER_ADDR_REQUEST, myServerAddr));
+                if (myServerAddr != null) {
+                    oos.writeObject(new Protokoll(ProtokollType.SERVER_ADDR, myServerAddr));
+                    oos.flush();
+                }
+                oos.writeObject(new Protokoll(ProtokollType.SERVER_ADDR_REQUEST, true));
                 oos.flush();
                 try {
                     nachricht = (Protokoll) ois.readObject(); // blockiert!
