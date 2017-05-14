@@ -25,7 +25,17 @@ public class ServerPool implements Serializable {
         return uniqueInstance;
     }
 
+    public void clear() {
+        this.servers.clear();
+    }
+
     public ServerPool addServers(Map<String, ServerAddr> servers) {
+        this.servers.putAll(servers);
+        return this;
+    }
+
+    public ServerPool setServers(Map<String, ServerAddr> servers) {
+        this.servers.clear();
         this.servers.putAll(servers);
         return this;
     }
@@ -36,6 +46,11 @@ public class ServerPool implements Serializable {
 
     public void addServer(String name, ServerAddr serverAddr) {
         servers.put(name, serverAddr);
+
+    }
+
+    public void removeServer(String name) {
+        servers.remove(name);
 
     }
 
@@ -54,7 +69,7 @@ public class ServerPool implements Serializable {
 
     @Override
     public String toString() {
-        return  " Servers: " + servers.toString();
+        return " Servers: " + servers.toString();
     }
 
 }

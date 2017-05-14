@@ -57,4 +57,25 @@ public class RecordDto implements RecordInterface, Serializable {
     public int getRid() {
         return rid;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RecordDto other = (RecordDto) obj;
+        if (this.title == null || other.title == null) {
+            return false;
+        }
+        return this.title.equals(other.title);
+    }
 }

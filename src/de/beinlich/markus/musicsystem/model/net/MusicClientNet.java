@@ -20,6 +20,7 @@ public class MusicClientNet extends Observable {
     private ObjectOutputStream oos;
 
     private ServerPool serverPool;
+    private boolean switchToServer = false;
 
     public MusicClientNet(String clientName) {
         this.clientName = clientName;
@@ -100,12 +101,12 @@ public class MusicClientNet extends Observable {
 
         try {
             //wenn es geklappt hat, kann die Verbindung zum alten Server getrennt werden
+            switchToServer = true;
             System.out.println("Old Socket:" + socket.hashCode());
             newSocket = new Socket(serverAddr.getServer_ip(), serverAddr.getPort());
             oos.writeObject(new Protokoll(ProtokollType.CLIENT_DISCONNECT, true));
             oos.flush();
             socket.close();
-            System.out.println("Old Socket:" + socket.hashCode());
             System.out.println("LocalSocketAddress: " + newSocket.getLocalSocketAddress());
             System.out.println("RemoteSocketAddress: " + newSocket.getRemoteSocketAddress());
 
@@ -158,6 +159,24 @@ public class MusicClientNet extends Observable {
 
             } catch (IOException | ClassNotFoundException ex) {
                 System.out.println(System.currentTimeMillis() + "CLIENT: Verbindung zum Server beendet - " + ex);
+
+                //SERVER_DISCONNECT nicht aufrufen, wenn es durch ein switchToServer ausgelöst wurde
+                if (switchToServer) {
+                    switchToServer = false;
+                } else {
+                    try {
+                        musicClientNet.setChanged();
+                        musicClientNet.notifyObservers(new Protokoll(ProtokollType.SERVER_DISCONNECT, true));
+                    } catch (InvalidObjectException ex1) {
+                        Logger.getLogger(MusicClientNet.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+
+                    try {
+                        socket.close();
+                    } catch (IOException ex1) {
+                        Logger.getLogger(MusicClientNet.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
             }
         }
     }

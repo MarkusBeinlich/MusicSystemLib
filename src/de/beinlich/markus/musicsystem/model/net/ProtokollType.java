@@ -1,4 +1,3 @@
-
 package de.beinlich.markus.musicsystem.model.net;
 
 import de.beinlich.markus.musicsystem.model.ClientInit;
@@ -15,15 +14,15 @@ import java.util.TreeMap;
  *
  * @author Markus Beinlich
  */
-public enum ProtokollType implements Serializable{
+public enum ProtokollType implements Serializable {
     MUSIC_COLLECTION_DTO(MusicCollectionDto.class),
-    MUSIC_SYSTEM_DTO(MusicSystemDto.class), 
-    MUSIC_PLAYER_DTO(MusicPlayerDto.class), 
+    MUSIC_SYSTEM_DTO(MusicSystemDto.class),
+    MUSIC_PLAYER_DTO(MusicPlayerDto.class),
     MUSIC_PLAYER_SELECTED(String.class),
-    RECORD_DTO(RecordDto.class), 
+    RECORD_DTO(RecordDto.class),
     RECORD_SELECTED(RecordDto.class),
-    STATE(MusicSystemState.class), 
-    PLAY_LIST_COMPONENT_DTO(PlayListComponentDto.class), 
+    STATE(MusicSystemState.class),
+    PLAY_LIST_COMPONENT_DTO(PlayListComponentDto.class),
     VOLUME(Double.class),
     TRACK_TIME(Integer.class),
     TRACK_SELECTED(PlayListComponentDto.class),
@@ -34,26 +33,27 @@ public enum ProtokollType implements Serializable{
     CLIENT_COMMAND_STOP(MusicSystemState.class),
     CLIENT_INIT(ClientInit.class),
     SERVER_POOL(TreeMap.class),
+    SERVER_POOL_REDUCED(TreeMap.class),
     SERVER_ADDR(ServerAddr.class),
     SERVER_ADDR_REQUEST(Boolean.class),
     CLIENT_DISCONNECT(Boolean.class),
     SERVER_DISCONNECT(Boolean.class),
-//    HAS_CURRENT_TIME(Boolean.class),
-//    HAS_TRACKS(Boolean.class),
-//    HAS_PAUSE(Boolean.class),
-//    HAS_PREVIOUS(Boolean.class),
-//    HAS_NEXT(Boolean.class),
+    //    HAS_CURRENT_TIME(Boolean.class),
+    //    HAS_TRACKS(Boolean.class),
+    //    HAS_PAUSE(Boolean.class),
+    //    HAS_PREVIOUS(Boolean.class),
+    //    HAS_NEXT(Boolean.class),
     CLIENT_NAME(String.class);
-    private final Class <?> classs;
-    
-    ProtokollType(Class classs){
+    private final Class<?> classs;
+
+    ProtokollType(Class classs) {
         this.classs = classs;
     }
 
     /**
      * @return the classs
      */
-    public Class <?> getClasss() {
+    public Class<?> getClasss() {
         return classs;
     }
 }
