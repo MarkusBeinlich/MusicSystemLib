@@ -26,6 +26,7 @@ public class ServerFinder {
 
     public void findServers() {
         //Nach weiteren aktiven IP-Adresse im LAN suchen 
+        System.out.println("Start findServers");
         tryAllAddressesOnLan();
     }
 
@@ -91,10 +92,11 @@ public class ServerFinder {
             Protokoll nachricht;
 
             try {
+//                System.out.println("tryToConnetServer " + hostAddress + " " + port);
                 socket = new Socket(hostAddress, port);
                 // Erzeugung der Kommunikations-Objekte
                 ois = new ObjectInputStream(socket.getInputStream());
-                System.out.println("tryToConnetServer " + hostAddress + " " + port);
+
                 System.out.println(System.currentTimeMillis() + "socket.connect 2");
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 // Als erstes write die eigene ServerAddresse übergeben!
@@ -136,10 +138,11 @@ public class ServerFinder {
             Protokoll nachricht;
 
             try {
+//                System.out.println("tryToConnetServer " + hostAddress + " " + port);
                 socket = new Socket(hostAddress, port);
                 // Erzeugung der Kommunikations-Objekte
                 ois = new ObjectInputStream(socket.getInputStream());
-                System.out.println("tryToConnetServer " + hostAddress + " " + port);
+                
                 System.out.println(System.currentTimeMillis() + "socket.connect 2");
                 oos = new ObjectOutputStream(socket.getOutputStream());
 

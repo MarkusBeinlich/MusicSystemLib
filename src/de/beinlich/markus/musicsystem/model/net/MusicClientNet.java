@@ -31,8 +31,10 @@ public class MusicClientNet extends Observable {
         serverPool = ServerPool.getInstance();
         serverFinder = new ServerFinder(serverPool, null);
         serverFinder.findServers();
-        System.out.println("Alle:" + serverPool.toString());
+
+        socket = null;
         while (socket == null) {
+            System.out.println("Alle:" + serverPool.toString());
             for (Map.Entry<String, ServerAddr> poolEntry : serverPool.getServers().entrySet()) {
                 ServerAddr serverAddr = poolEntry.getValue();
                 System.out.println("ServerAddr1: " + serverAddr);
@@ -165,17 +167,17 @@ public class MusicClientNet extends Observable {
                     switchToServer = false;
                 } else {
                     try {
+                        socket.close();
+                    } catch (IOException ex1) {
+                        Logger.getLogger(MusicClientNet.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                    try {
                         musicClientNet.setChanged();
                         musicClientNet.notifyObservers(new Protokoll(ProtokollType.SERVER_DISCONNECT, true));
                     } catch (InvalidObjectException ex1) {
                         Logger.getLogger(MusicClientNet.class.getName()).log(Level.SEVERE, null, ex1);
                     }
 
-                    try {
-                        socket.close();
-                    } catch (IOException ex1) {
-                        Logger.getLogger(MusicClientNet.class.getName()).log(Level.SEVERE, null, ex1);
-                    }
                 }
             }
         }
