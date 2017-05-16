@@ -6,6 +6,7 @@
 package de.beinlich.markus.musicsystem.model.net;
 
 import java.io.Serializable;
+import java.util.*;
 
 /**
  *
@@ -80,5 +81,13 @@ public class ServerAddr implements Serializable {
         }
         final ServerAddr other = (ServerAddr) obj;
         return (this.port == other.port) && (this.server_ip.equals(other.server_ip)); 
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 61 * hash + this.port;
+        hash = 61 * hash + Objects.hashCode(this.server_ip);
+        return hash;
     }
 }

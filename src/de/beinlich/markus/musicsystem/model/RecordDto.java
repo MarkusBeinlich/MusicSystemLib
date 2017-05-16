@@ -58,6 +58,15 @@ public class RecordDto implements RecordInterface, Serializable {
         return rid;
     }
 
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 53 * hash + this.rid;
+        hash = 53 * hash + Objects.hashCode(this.title);
+        return hash;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -66,16 +75,16 @@ public class RecordDto implements RecordInterface, Serializable {
         if (obj == null) {
             return false;
         }
-        if (this == null) {
-            return false;
-        }
         if (getClass() != obj.getClass()) {
             return false;
         }
         final RecordDto other = (RecordDto) obj;
-        if (this.title == null || other.title == null) {
+        if (this.rid != other.rid) {
             return false;
         }
-        return this.title.equals(other.title);
+        if (!Objects.equals(this.title, other.title)) {
+            return false;
+        }
+        return true;
     }
 }
